@@ -45,8 +45,32 @@ h1,h2,h3{font-weight:500;line-height:1.16;letter-spacing:-.035em}
 .site-footer{border-top:1px solid var(--line);padding:20px 28px 26px;text-align:center;color:var(--muted);font:12px/1.5 ui-sans-serif,system-ui,sans-serif}
 @media(max-width:600px){body{font-size:17px}.site-header{padding:18px 20px}.header-note{font-size:12px}main{padding:45px 22px 65px}.intro{padding-bottom:34px}.intro h1{font-size:43px}.post-row h2{font-size:24px}.article-content{font-size:18px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+
+  /* --- image post styles --- */
+  figure.post-figure { margin: 1.2rem 0; }
+  figure.post-figure img {
+    width: 100%; height: auto; display: block;
+    border-radius: 10px; border: 1px solid rgba(0,0,0,.08);
+  }
+  figure.post-figure figcaption {
+    font-size: .9rem; color: #666; margin-top: .5rem; line-height: 1.5;
+  }
+
 </style>
 </head>
+<!--
+  ================= HOW TO ADD AN IMAGE POST =================
+  1. Upload your picture to this repo (Add file > Upload files), keep the name simple, e.g. sunset.jpg
+  2. Copy this block into a post's <article> where you want the picture:
+
+  <figure class="post-figure">
+    <img src="sunset.jpg" alt="describe the picture">
+    <figcaption>Your words under the picture go here.</figcaption>
+  </figure>
+
+  3. Edit ONLY the words between > and < and the file name in src="..."
+  ===========================================================
+-->
 <body>
 <header class="site-header">
   <a class="brand" href="#home" aria-label="Waajid's first journal home"><span class="brand-mark" aria-hidden="true">W</span><span>Waajid's first ever journal</span></a>
@@ -108,6 +132,13 @@ h1,h2,h3{font-weight:500;line-height:1.16;letter-spacing:-.035em}
       <p>The first post does not need to explain everything you might write about later. It can simply be a hello, a thought from the week, or a question you are still working through.</p>
       <p>Over time, a collection of posts becomes a record of what caught your attention and how your ideas changed. That is a good reason to begin before everything feels perfectly planned.</p>
       <p>So this is a beginning. I will write one post at a time, keep learning as I go, and see what takes shape.</p>
+
+    <figure class="post-figure">
+      <img src="images/your-image.jpg" alt="describe the picture here">
+      <figcaption>YOUR CAPTION HERE: type whatever you want to say under the picture.</figcaption>
+    </figure>
+
+    <p>
     </div>
   </article>
 </main>
