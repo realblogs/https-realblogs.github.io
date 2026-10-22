@@ -52,12 +52,14 @@ h1,h2,h3{font-weight:500;line-height:1.16;letter-spacing:-.035em}
     width: 100%; height: auto; display: block;
     border-radius: 10px; border: 1px solid rgba(0,0,0,.08);
   }
-  #starting-a-blog .article-content > figure.post-figure img {
+  #starting-a-blog .article-content > figure.post-figure img,
+  #post .article-content > figure.post-figure img {
     width: auto; max-width: 54%; height: auto;
     aspect-ratio: 1.72; object-fit: cover;
     cursor: zoom-in;
   }
-  #starting-a-blog .article-content > figure.post-figure img.idea-screenshot {
+  #starting-a-blog .article-content > figure.post-figure img.idea-screenshot,
+  #post .article-content > figure.post-figure img.idea-screenshot {
     object-fit: contain;
   }
   figure.post-figure figcaption {
@@ -146,8 +148,14 @@ h1,h2,h3{font-weight:500;line-height:1.16;letter-spacing:-.035em}
       <p>The last question is deliberately about making the next day easier, not making it more ambitious. I might write “open the draft before checking email” or “ask Mira about the handoff.” A clear first step can save a surprising amount of morning energy.</p>
       <p>I do not reread these notes every day or try to turn them into a productivity dashboard. They are mostly a way to close the mental tabs I can close, and to mark the ones I want to return to.</p>
       <p>A small pause will not make every day feel finished. But it can make the transition out of work a little kinder—and leave tomorrow with a place to begin.</p>
-
-
+      <figure class="post-figure">
+        <img src="sample-habit.jpg" alt="Sample photograph for a quiet pause">
+        <figcaption>A quiet moment to pause, gather a few thoughts, and make room for what comes next. Its like this.</figcaption>
+      </figure>
+      <figure class="post-figure">
+        <img class="idea-screenshot" src="https://raw.githubusercontent.com/realblogs/realblogs.github.io/main/images/idea-22oct.jpg" alt="IDEA stock on Groww, 22 Oct 2026" />
+        <figcaption>My first intraday trade today: IDEA. Small profit, big lesson on charges.</figcaption>
+      </figure>
     </div>
   </article>
 </main>
@@ -185,7 +193,7 @@ h1,h2,h3{font-weight:500;line-height:1.16;letter-spacing:-.035em}
   const zoomDialog = document.getElementById('image-zoom');
   const zoomImage = zoomDialog.querySelector('img');
   const closeButton = zoomDialog.querySelector('.image-zoom-close');
-  const postImages = document.querySelectorAll('#starting-a-blog .article-content > figure.post-figure img');
+  const postImages = document.querySelectorAll('#starting-a-blog .article-content > figure.post-figure img, #post .article-content > figure.post-figure img');
   let lastFocusedImage = null;
   let ignoreTouchClick = false;
   let touchResetTimer;
