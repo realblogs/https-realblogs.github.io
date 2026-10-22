@@ -52,12 +52,32 @@ h1,h2,h3{font-weight:500;line-height:1.16;letter-spacing:-.035em}
     width: 100%; height: auto; display: block;
     border-radius: 10px; border: 1px solid rgba(0,0,0,.08);
   }
-  #post .article-content > figure.post-figure img {
-    width: auto; max-width: 58%; height: auto;
+  #starting-a-blog .article-content > figure.post-figure img {
+    width: auto; max-width: 54%; height: auto;
+    cursor: zoom-in;
   }
   figure.post-figure figcaption {
     font-size: .9rem; color: #666; margin-top: .5rem; line-height: 1.5;
   }
+  #image-zoom:not([hidden]) {
+    position: fixed; inset: 0; z-index: 10000; display: flex;
+    align-items: center; justify-content: center;
+    padding: max(1rem, env(safe-area-inset-top)) max(1rem, env(safe-area-inset-right)) max(1rem, env(safe-area-inset-bottom)) max(1rem, env(safe-area-inset-left));
+    background: rgba(7, 12, 18, .96);
+  }
+  #image-zoom img {
+    width: auto; height: auto; max-width: 100%; max-height: 100%;
+    object-fit: contain; border-radius: 10px;
+    touch-action: pinch-zoom;
+  }
+  #image-zoom .image-zoom-close {
+    position: fixed; top: max(.75rem, env(safe-area-inset-top)); right: max(.75rem, env(safe-area-inset-right));
+    z-index: 1; width: 44px; height: 44px; border: 1px solid rgba(255,255,255,.5);
+    border-radius: 50%; background: rgba(20,27,35,.8); color: white;
+    font: 30px/1 ui-sans-serif,system-ui,sans-serif; cursor: pointer;
+  }
+  #image-zoom .image-zoom-close:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
+  body.image-zoom-open { overflow: hidden; }
 
 </style>
 </head>
@@ -154,7 +174,78 @@ h1,h2,h3{font-weight:500;line-height:1.16;letter-spacing:-.035em}
     </div>
   </article>
 </main>
+<div id="image-zoom" hidden role="dialog" aria-modal="true" aria-label="Zoomed image">
+  <button class="image-zoom-close" type="button" aria-label="Close zoomed image">×</button>
+  <img alt="">
+</div>
 <footer class="site-footer">Made to be read. Published by Waajid.</footer>
+<script>
+(function () {
+  const zoomDialog = document.getElementById('image-zoom');
+  const zoomImage = zoomDialog.querySelector('img');
+  const closeButton = zoomDialog.querySelector('.image-zoom-close');
+  const postImages = document.querySelectorAll('#starting-a-blog .article-content > figure.post-figure img');
+  let lastFocusedImage = null;
+  let ignoreTouchClick = false;
+  let touchResetTimer;
+
+  function closeZoom() {
+    if (zoomDialog.hidden) return;
+    zoomDialog.hidden = true;
+    document.body.classList.remove('image-zoom-open');
+    zoomImage.removeAttribute('src');
+    if (lastFocusedImage) lastFocusedImage.focus();
+  }
+
+  function openZoom(image) {
+    lastFocusedImage = image;
+    zoomImage.src = image.currentSrc || image.src;
+    zoomImage.alt = image.alt || 'Zoomed image';
+    zoomDialog.hidden = false;
+    document.body.classList.add('image-zoom-open');
+    closeButton.focus();
+  }
+
+  postImages.forEach(function (image) {
+    image.tabIndex = 0;
+    image.setAttribute('role', 'button');
+    image.setAttribute('aria-label', 'Open image full screen: ' + (image.alt || 'image'));
+    image.addEventListener('click', function () { openZoom(image); });
+    image.addEventListener('keydown', function (event) {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        openZoom(image);
+      }
+    });
+  });
+
+  closeButton.addEventListener('click', closeZoom);
+  zoomDialog.addEventListener('click', function (event) {
+    if (event.target === zoomDialog) closeZoom();
+  });
+  zoomImage.addEventListener('click', function () {
+    if (ignoreTouchClick) { ignoreTouchClick = false; return; }
+    closeZoom();
+  });
+  zoomImage.addEventListener('touchstart', function (event) {
+    if (event.touches.length === 1) ignoreTouchClick = false;
+    if (event.touches.length > 1) {
+      ignoreTouchClick = true;
+      clearTimeout(touchResetTimer);
+    }
+  }, { passive: true });
+  zoomImage.addEventListener('touchend', function () {
+    if (ignoreTouchClick) {
+      clearTimeout(touchResetTimer);
+      touchResetTimer = setTimeout(function () { ignoreTouchClick = false; }, 700);
+    }
+  }, { passive: true });
+  document.addEventListener('keydown', function (event) {
+    if (event.key === 'Escape') closeZoom();
+  });
+
+}());
+</script>
 <script>
 (function () {
   const home = document.getElementById('home');
