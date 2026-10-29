@@ -85,6 +85,57 @@ h1,h2,h3{font-weight:500;line-height:1.16;letter-spacing:-.035em}
   #image-zoom .image-zoom-close:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
   body.image-zoom-open { overflow: hidden; }
 
+  /* --- reader survey styles --- */
+  .reader-survey {
+    max-width: var(--measure); margin: 0 auto; padding: 34px 28px 46px;
+    border-top: 1px solid var(--line);
+  }
+  .reader-survey h2 {
+    margin: 0 0 18px; font-size: 29px;
+  }
+  .survey-form { margin: 0; }
+  .survey-question {
+    display: block; margin: 0 0 15px; padding: 0;
+    font: 600 16px/1.5 ui-sans-serif,system-ui,-apple-system,'Segoe UI',sans-serif;
+  }
+  .survey-options { margin: 0; padding: 0; border: 0; }
+  .survey-option { display: block; margin: 8px 0; cursor: pointer; }
+  .survey-option input {
+    position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+    overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; clip-path: inset(50%); border: 0;
+  }
+  .survey-option span {
+    display: flex; align-items: center; min-height: 48px; gap: 12px;
+    padding: 10px 14px; border: 1px solid var(--line); border-radius: 7px;
+    background: rgba(255,255,255,.55); font: 15px/1.45 ui-sans-serif,system-ui,-apple-system,'Segoe UI',sans-serif;
+    transition: background-color .15s ease,border-color .15s ease;
+  }
+  .survey-option span::before {
+    content: ""; flex: 0 0 17px; width: 17px; height: 17px;
+    border: 1.5px solid var(--muted); border-radius: 50%; background: var(--paper);
+  }
+  .survey-option:hover span { border-color: var(--accent); }
+  .survey-option.is-selected span {
+    border-color: var(--accent); background: var(--soft); color: var(--ink);
+  }
+  .survey-option.is-selected span::before {
+    border-color: var(--accent); background: var(--accent); box-shadow: inset 0 0 0 4px var(--soft);
+  }
+  .survey-option input:focus-visible + span { outline: 3px solid #5c95c4; outline-offset: 3px; }
+  .survey-submit {
+    min-height: 46px; margin-top: 13px; padding: 10px 22px; border: 0; border-radius: 6px;
+    background: var(--accent); color: white; font: 600 15px/1.4 ui-sans-serif,system-ui,-apple-system,'Segoe UI',sans-serif;
+    cursor: pointer; touch-action: manipulation;
+  }
+  .survey-submit:hover { background: #153b5d; }
+  .survey-submit:focus-visible { outline: 3px solid #5c95c4; outline-offset: 3px; }
+  .survey-message {
+    min-height: 1.5em; margin: 11px 0 0; color: var(--muted);
+    font: 14px/1.5 ui-sans-serif,system-ui,-apple-system,'Segoe UI',sans-serif;
+  }
+  @media(max-width:600px){.reader-survey{padding:29px 22px 37px}.reader-survey h2{font-size:26px}}
+  @media(prefers-reduced-motion:reduce){.survey-option span{transition:none}}
+
 </style>
 </head>
 <!--
@@ -183,6 +234,23 @@ h1,h2,h3{font-weight:500;line-height:1.16;letter-spacing:-.035em}
     </div>
   </article>
 </main>
+<!-- SURVEY SECTION START -->
+<section class="reader-survey" aria-labelledby="reader-survey-title">
+  <h2 id="reader-survey-title">Quick Survey</h2>
+  <form class="survey-form">
+    <fieldset class="survey-options">
+      <legend class="survey-question">How often do you read blogs?</legend>
+      <label class="survey-option"><input type="radio" name="reader-survey" value="option-one" required><span>A) Sample option one</span></label>
+      <label class="survey-option"><input type="radio" name="reader-survey" value="option-two"><span>B) Sample option two</span></label>
+      <label class="survey-option"><input type="radio" name="reader-survey" value="option-three"><span>C) Sample option three</span></label>
+      <label class="survey-option"><input type="radio" name="reader-survey" value="option-four"><span>D) Sample option four</span></label>
+      <!-- Alternative label style: 1) Sample option one  2) Sample option two  3) Sample option three  4) Sample option four -->
+    </fieldset>
+    <button class="survey-submit" type="submit">Submit</button>
+    <p class="survey-message" aria-live="polite"></p>
+  </form>
+</section>
+<!-- SURVEY SECTION END -->
 <div id="image-zoom" hidden role="dialog" aria-modal="true" aria-label="Zoomed image">
   <button class="image-zoom-close" type="button" aria-label="Close zoomed image">×</button>
   <img alt="zoom">
@@ -274,6 +342,22 @@ h1,h2,h3{font-weight:500;line-height:1.16;letter-spacing:-.035em}
   }
   window.addEventListener('hashchange', showCurrentView);
   showCurrentView();
+}());
+</script>
+<script>
+(function () {
+  const surveyForm = document.querySelector('.survey-form');
+  const surveyMessage = surveyForm.querySelector('.survey-message');
+  surveyForm.addEventListener('change', function () {
+    surveyForm.querySelectorAll('.survey-option').forEach(function (option) {
+      option.classList.toggle('is-selected', option.querySelector('input').checked);
+    });
+    surveyMessage.textContent = '';
+  });
+  surveyForm.addEventListener('submit', function (event) {
+    event.preventDefault();
+    surveyMessage.textContent = 'Thank you for sharing your answer.';
+  });
 }());
 </script>
 </body>
